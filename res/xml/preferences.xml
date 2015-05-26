@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="@string/pref_start_automatically_key"
+        android:summary="@string/pref_start_on_mount_summary"
+        android:title="@string/pref_start_automatically_title" />
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="@string/pref_prevent_sleep_key"
+        android:summary="@string/pref_prevent_sleep_summary"
+        android:title="@string/pref_prevent_sleep_title" />
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="@string/pref_install_on_internal_storage_key"
+        android:summary="@string/pref_install_on_internal_storage_summary"
+        android:title="@string/pref_install_on_internal_storage_title" />
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="@string/pref_limit_to_4gb_key"
+        android:summary="@string/pref_limit_to_4gb_summary"
+        android:title="@string/pref_limit_to_4gb_title" />
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="@string/pref_use_checksum_key"
+        android:summary="@string/pref_use_checksum_summary"
+        android:title="@string/pref_use_checksum_title" />
+
+    <EditTextPreference
+        android:defaultValue="@string/default_image_path"
+        android:inputType="textNoSuggestions"
+        android:key="@string/pref_image_path_key"
+        android:summary="@string/pref_image_path_summary"
+        android:title="@string/pref_image_path_title" />
+    <EditTextPreference
+        android:defaultValue="@string/default_post_start_script"
+        android:inputType="textNoSuggestions"
+        android:key="@string/pref_post_start_key"
+        android:summary="@string/pref_post_start_summary"
+        android:title="@string/pref_post_start_title" />
+    <EditTextPreference
+        android:defaultValue="@string/default_pre_stop_script"
+        android:inputType="textNoSuggestions"
+        android:key="@string/pref_pre_stop_key"
+        android:summary="@string/pref_pre_stop_summary"
+        android:title="@string/pref_pre_stop_title" />
+
+</PreferenceScreen>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--suppress ALL -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" android:id="@+id/MarzecPro" android:background="#ff000000" android:weightSum="1">
+
+    <ImageView
+            android:layout_width="918dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView" android:layout_gravity="center_horizontal" android:src="@drawable/title"
+            android:contentDescription="@string/app_name" android:layout_weight="0.08" android:labelFor="@drawable/title"
+            android:baselineAlignBottom="false"/>
+    <ImageView
+            android:layout_width="217dp"
+            android:layout_height="258dp"
+            android:id="@+id/imageView2" android:layout_gravity="center_horizontal"
+            android:src="@drawable/icon" android:layout_weight="0.16" android:contentDescription="@string/default_debian_release"
+            android:labelFor="@drawable/icon"/>
+    <ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageButton" android:layout_gravity="center_horizontal" android:layout_weight="0.13"
+            android:contentDescription="@string/pref_install_on_internal_storage_summary" android:src="@drawable/enter"/>
+</LinearLayout>

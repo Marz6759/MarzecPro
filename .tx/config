@@ -1,0 +1,9 @@
+[main]
+host = https://www.transifex.com
+lang_map = en_AU: en-rAU, en_BZ: en-rBZ, en_CA: en-rCA, en_GB: en-rGB, en_IE: en-rIE, en_IN: en-rIN, en_JM: en-rJM, en_MY: en-rMY, en_NZ: en-rNZ, en_PH: en-rPH, en_SG: en-rSG, en_TT: en-rTT, en_US: en-rUS, en_ZA: en-rZA, en_ZW: en-rZW,
+
+[marzec.stringsxml]
+file_filter = res/values-<lang>/strings.xml
+host = https://www.transifex.com
+source_file = res/values/strings.xml
+source_lang = en

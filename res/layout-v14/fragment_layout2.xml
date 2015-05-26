@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/holo_green_dark"
+                android:orientation="vertical" >
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Defence"
+            android:textColor="@android:color/black"
+            android:textSize="20sp" android:id="@+id/head2" android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"/>
+    <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/volatility" android:layout_below="@+id/volatility" android:layout_centerHorizontal="true"
+            android:src="@drawable/sumsin"/>
+    <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/truecrypt" android:layout_below="@+id/volatility"
+            android:layout_centerHorizontal="true" android:src="@drawable/truecrypt"/>
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="p0f"
+            android:id="@+id/button"
+            android:layout_below="@+id/truecrypt" android:layout_toLeftOf="@+id/p0f" android:layout_toStartOf="@+id/p0f"/>
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Wireshark"
+            android:id="@+id/button3"
+            android:layout_below="@+id/truecrypt" android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
+
+</RelativeLayout>
