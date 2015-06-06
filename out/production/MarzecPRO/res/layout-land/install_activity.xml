@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--suppress ALL -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" android:weightSum="1">
+
+    <ImageView
+            android:layout_width="851dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView3" android:layout_gravity="center_horizontal" android:src="@drawable/title"
+            android:layout_weight="0.61" android:contentDescription="@string/app_name"
+            android:baselineAlignBottom="false"/>
+    <ImageView
+            android:layout_width="280dp"
+            android:layout_height="109dp"
+            android:id="@+id/imageView4" android:layout_gravity="center_horizontal"
+            android:src="@drawable/icon" android:layout_weight="0.30"
+            android:contentDescription="@string/default_arch"/>
+    <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageButton2" android:layout_gravity="center_horizontal" android:src="@drawable/enter"
+            android:contentDescription="@string/pref_install_on_internal_storage_summary"/>
+
+</LinearLayout>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/background_dark"
+                android:orientation="vertical" >
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/defence"
+            android:textColor="@android:color/black"
+            android:textSize="20sp" android:id="@+id/head2" android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" android:contentDescription="@string/heading2"/>
+    <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/volatility" android:layout_below="@+id/volatility" android:layout_centerHorizontal="true"
+            android:src="@drawable/sumsin" android:clickable="false" android:contentDescription="@string/volatility"/>
+    <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/truecrypt" android:layout_below="@+id/volatility"
+            android:layout_centerHorizontal="true" android:src="@drawable/truecrypt"
+            android:contentDescription="@string/truecrypt"/>
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/p0f"
+            android:id="@+id/p0f"
+            android:contentDescription="@string/p0f" android:elegantTextHeight="true"
+            android:layout_below="@+id/truecrypt" android:layout_alignLeft="@+id/truecrypt"
+            android:layout_alignStart="@+id/truecrypt"/>
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wireshark"
+            android:id="@+id/wireshark"
+            android:layout_below="@+id/truecrypt" android:layout_alignRight="@+id/truecrypt"
+            android:layout_alignEnd="@+id/truecrypt"/>
+
+</RelativeLayout>

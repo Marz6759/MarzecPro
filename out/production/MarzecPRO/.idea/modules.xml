@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/MarzecPRO.iml" filepath="$PROJECT_DIR$/MarzecPRO.iml" />
+      <module fileurl="file://$USER_HOME$/Downloads/SlidingMenu-master/example/example.iml" filepath="$USER_HOME$/Downloads/SlidingMenu-master/example/example.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../SlidingMenu-master/library/library.iml" filepath="$PROJECT_DIR$/../SlidingMenu-master/library/library.iml" />
+      <module fileurl="file://$USER_HOME$/Downloads/SlidingMenu-master/library/library.iml" filepath="$USER_HOME$/Downloads/SlidingMenu-master/library/library.iml" />
+      <module fileurl="file://$USER_HOME$/Downloads/SlidingMenu-master/library-maps-support/library-maps-support.iml" filepath="$USER_HOME$/Downloads/SlidingMenu-master/library-maps-support/library-maps-support.iml" />
+    </modules>
+  </component>
+</project>

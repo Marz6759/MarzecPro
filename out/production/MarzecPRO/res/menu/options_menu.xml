@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/menu_jackpal_terminal"
+        android:title="@string/menu_jackpal_terminal_title"/>
+    <item
+        android:id="@+id/menu_preferences"
+        android:title="@string/menu_preferences_title"/>
+    <item
+        android:id="@+id/menu_install_log"
+        android:title="@string/menu_install_log_title"/>
+    <item
+        android:id="@+id/menu_delete"
+        android:title="@string/menu_delete_title"/>
+
+</menu>

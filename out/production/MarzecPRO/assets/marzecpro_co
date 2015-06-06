@@ -1,0 +1,235 @@
+#!/bin/sh
+# this is the common settings for the various scripts here
+
+echo "----------------------------------------"
+
+export TERM=linux
+export HOME=/root
+export HOSTNAME=MarzecPro
+export DEBIAN_FRONTEND=noninteractive
+
+if [ $# -lt 1 ]; then
+    echo "incorrect number of arguments, should be between 1 and 8:"
+    echo "    $0 app_bin [sdcard] [install_path] [mnt] [release] [mirror] [imagesize] [arch]"
+fi
+
+# use the included utilities first
+app_bin=$1
+export PATH=$app_bin:/usr/sbin:/usr/bin:/sbin:/bin:/system/sbin:/system/bin:/system/xbin
+
+echo `basename $0`
+
+if [ -z $sdcard ]; then
+    sdcard=$2
+fi
+if [ -z $install_path ]; then
+    install_path=$3
+fi
+if [ -z $mnt ]; then
+    mnt=$4
+fi
+
+if [ x"$mnt" = x"$install_path" ]; then
+    install_on_internal_storage=yes
+else
+    install_on_internal_storage=no
+fi
+
+test -d $app_bin || echo "app_bin: '$app_bin' not a directory"
+test -d $sdcard || echo "sdcard: '$sdcard' not a directory"
+test -z $install_path && echo "install_path: '$install_path' is empty"
+test -z $mnt && echo "mnt: '$mnt' is empty"
+
+busybox_path="$app_bin"
+busybox=$busybox_path/busybox
+
+fsck_chroot=`dirname $app_bin`/fsck-chroot
+install_fsck=no
+
+sha1file=`dirname $app_bin`/`basename $install_path.sha1`
+
+# keep all files private to this app
+umask 077
+
+
+make_debian_symlink () {
+    if [ -d /debian ] && ! [ -h /debian ]; then
+        mount -o remount,rw rootfs /
+        umount /debian
+        rmdir /debian
+        mount -o remount,ro rootfs /
+    fi
+    if [ ! -e /debian ]; then
+        mount -o remount,rw rootfs /
+        echo "'/debian' not found, making a symlink to the chroot."
+        cd /
+        ln -s $mnt /debian
+        mount -o remount,ro rootfs /
+    fi
+}
+
+make_root_symlinks () {
+    wd=`pwd`
+    cd /
+    mount -o remount,rw rootfs /
+    for x in \
+        bin boot home media opt selinux srv usr var tmp
+    do
+        ln -s $mnt/$x /$x
+    done
+    mount -o remount,ro rootfs /
+    cd "$wd"
+}
+
+remove_root_symlinks () {
+    cd /
+    mount -o remount,rw rootfs /
+    for x in \
+        bin boot home media opt selinux srv usr var tmp
+    do
+        rm /$x
+    done
+    mount -o remount,ro rootfs /
+}
+
+find_losetup () {
+    if [ -x /system/xbin/losetup ]; then
+        echo /system/xbin/losetup
+    else
+        echo $app_bin/losetup
+    fi
+}
+
+losetup=`find_losetup`
+
+find_mounted_loopdev () {
+    $app_bin/sed -n "s|^\(/dev/.*loop[0-9][0-9]*\) $mnt .*|\1|p" /proc/mounts
+}
+
+find_free_loopdev () {
+    # on Android 'losetup -f' doesn't reliably return a device that will
+    # actually work. So instead we iterate through the possible loop devices
+    # and query to see if anything is attached, and return the first one found
+    # that has nothing attached. Missing device files are created on the fly.
+    if [ -e /dev/block/loop0 ]; then
+        # only do this, if the loopback device files are in the location, hopefully..... damn i hope this works MARZ!!
+        i=0 # first device number is 0
+        while [ "$i" -le 255 ]; do # iterate through device numbers,
+                                   # until a free one is found (return below),
+                                   # or we run out of device numbers (255)
+            loopdev="/dev/block/loop$i"
+
+            # create the device file, if it does not yet exist
+            if [ ! -e "$loopdev" ]; then
+                mknod -m 600 "$loopdev" b 7 $i > /dev/null 2>&1
+            fi
+
+            # check if it is unused; return it, if it's unused.
+            if ! `$losetup "$loopdev" > /dev/null 2>&1`; then
+                echo "$loopdev"
+                return
+            fi
+
+            i=$((i+1)); # next device number
+        done
+    fi
+
+    # if the above doesn't succeed, ask the system as a fallback
+    echo `$losetup -f`
+}
+
+find_attached_loopdev () {
+    for loopdev in `$app_bin/ls -1 /dev/block/loop*`; do
+        if `$losetup $loopdev 2>&1 | grep -q $install_path`; then
+            echo $loopdev
+            return
+        fi
+    done
+}
+
+find_loopdev () {
+    loopdev=`find_attached_loopdev`
+    if [ -z $loopdev ]; then
+        echo `find_free_loopdev`
+    else
+        echo $loopdev
+    fi
+}
+
+loopdev=`find_loopdev`
+
+
+find_best_filesystem () {
+    $app_bin/grep 'ext[234]' /proc/filesystems | $app_bin/sort | $app_bin/tail -1
+}
+
+#------------------------------------------------------------------------------#
+# tricks to get a working fsck
+
+# We include Debian's e2fsck.static, which needs to check /etc/mtab to make
+# sure the filesystem being check is not currently mounted. on Android, /etc
+# is actually /system/etc, so in order to avoid modifying /system, we setup a
+# special minimal chroot just for running e2fsck.static
+
+test_or_create_dir () {
+    test -e $1 || mkdir -p $1
+}
+
+create_e2fsck_chroot () {
+    echo "Setting up chroot for e2fsck.static"
+    test_or_create_dir $fsck_chroot
+    test_or_create_dir $fsck_chroot/`dirname $install_path`
+    test_or_create_dir $fsck_chroot/app_bin
+    test_or_create_dir $fsck_chroot/dev
+    test_or_create_dir $fsck_chroot/etc
+    test_or_create_dir $fsck_chroot/proc
+    test -e $fsck_chroot/etc/mtab || \
+        ln -s /proc/mounts $fsck_chroot/etc/mtab
+}
+
+find_and_run_fsck () {
+    if [ -z $1 ]; then
+        fsck_flags="-pv"
+    else
+        fsck_flags=$1
+    fi
+# check for embedded fsck first, to allow overriding of Android's fsck
+    if [ -x $app_bin/e2fsck.static ]; then
+        fsck=$app_bin/e2fsck.static
+    # Debian's e2fsck.static needs to check /etc/mtab to make sure the
+    # filesystem being check is not currently mounted. on Android, /etc is
+    # actually /system/etc, so in order to avoid modifying /system, we run
+    # e2fsck.static in a special minimal chroot.
+        create_e2fsck_chroot
+        imagedir=`dirname $install_path`
+        mount -o bind $app_bin $fsck_chroot/app_bin
+        mount -o bind /dev $fsck_chroot/dev
+        mount -o bind /proc $fsck_chroot/proc
+        mount -o bind $imagedir $fsck_chroot/$imagedir
+        echo "> $fsck $fsck_flags $install_path"
+        chroot $fsck_chroot /app_bin/`basename $fsck` $fsck_flags $install_path
+        fsck_return=$?
+        umount $fsck_chroot/app_bin
+        umount $fsck_chroot/dev
+        umount $fsck_chroot/proc
+        umount $fsck_chroot/$imagedir
+    elif [ -x /system/bin/e2fsck ]; then
+        fsck=/system/bin/e2fsck
+        echo "> $fsck $fsck_flags $install_path"
+        $fsck $fsck_flags $install_path
+        fsck_return=$?
+    else
+        echo "NO fsck FOUND, SKIPPING DISK CHECK!"
+        fsck_return=0
+        install_fsck=yes
+    fi
+
+    test $fsck_return -lt 4 || exit $fsck_return
+}
+
+install_e2fsck_static () {
+        echo "Installing e2fsck.static from Debian..."
+        PATH=/sbin:/bin:/usr/bin \
+            chroot $mnt /usr/bin/apt-get --no-install-recommends install e2fsck-static
+        cp $mnt/sbin/e2fsck.static $app_bin/
+}
