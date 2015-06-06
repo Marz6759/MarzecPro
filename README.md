@@ -1,3 +1,4 @@
+
 #To my dear Uncle Shumon, I have finished most of the coding necessary to install the features onto the device, however, in my attempt to
  clumsily try to make the app's GUI more 'fancy', I have lost track of some of the java classes. I also need to add the coding for the right
  commands get executed when asked for,for example, when the user presses on metasploit, the bash command in the chroot enviroment shall be
