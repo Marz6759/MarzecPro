@@ -1,10 +1,3 @@
-
-#To my dear Uncle Shumon, I have finished most of the coding necessary to install the features onto the device, however, in my attempt to
- clumsily try to make the app's GUI more 'fancy', I have lost track of some of the java classes. I also need to add the coding for the right
- commands get executed when asked for,for example, when the user presses on metasploit, the bash command in the chroot enviroment shall be
- 'msfconsole' or when asking for Hydra, the simple bash command shall be 'hydra' and so on. But I believe that it wont be much of a problem, as the
- coding behind it is not too much of a hassle, however if you would kindly review the boot scripts, chrooting enviroment and the installation
- script, it would mean a lot to me.
  ______        ______  _______ _______ ______ ______ ______   _____
 |  ___ \   /\ (_____ \(_______|_______) _____|_____ (_____ \ / ___ \
 | | _ | | /  \ _____) )  __    _____ | /      _____) )____) ) |   | |
